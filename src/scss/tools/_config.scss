@@ -1,0 +1,784 @@
+// ----------------------------------------------
+// MQs
+//-----------------------------------------------
+//Smallest phone
+$mq-xsmall: 22em;
+//phone
+$mq-small: 32em;
+//Tablet
+$mq-med: 54em;
+//laptop
+$mq-large: 65em;
+//Past laptop
+$mq-xlarge: 91em;
+//Mid Size monitor
+$mq-xxlarge: 115em;
+//Thunderbold goes to 157em
+$mq-xxxlarge: 130em;
+
+$color-alpha:     #00ffc8;
+$color-beta:      #003a49;
+$color-white:     #fff;
+$color-lightgrey: #f5f6f6;
+$color-midgrey:   #a7a6a6;
+
+$ease-cb: cubic-bezier(.4,0,.2,1);
+$ease-cb-2: cubic-bezier(.19,1,.22,1);
+$ease-cb-3: cubic-bezier(.77,0,.175,1);
+
+$font-header: "Montserrat", Helvetica, sans-serif;
+$font-paragraph: "Montserrat", Georgia, serif;
+
+%font-links{
+  font-family: $font-header;
+  font-size: 0.8em;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+
+//----------------------------------------------
+//  bg-overlay()
+//  Pseduo overlay element  
+//  @param: $bg_hex: [$color-dark] - hex value for rgba conversion
+//  @param: $bg_opacity:[0.6] - alpha transparency level
+//  @param: $top_layer: element or class name for higher z-index layer
+//----------------------------------------------
+@mixin bg-overlay($bg_hex: $color-dark, $opacity: 0.6) {
+  &:after {
+    z-index: 0;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: $opacity;
+    background: $bg_hex;
+  }
+}
+
+//----------------------------------------------
+//  font-rwd
+//  Change font-size across breaks 
+//  @param: $font_sm  - at small
+//  @param: $font_med - at med break
+//  @param: $font_lg  - at Large break
+//  @param: $font_xl  - at Xlarge break  
+//----------------------------------------------
+@mixin font-rwd($sm:null, $med:null, $lg:null, $xl:null, $xxl:null) {
+  font-size: $sm;
+  
+  @if $med {
+    @media(min-width: $mq-med){
+      font-size: $med;
+    }
+  }
+
+  @if $lg {
+    @media(min-width: $mq-large){
+      font-size: $lg;
+    }
+  }
+
+  @if $xl {
+    @media(min-width: $mq-xlarge){
+      font-size: $xl;
+    }
+  }
+
+  @if $xxl {
+    @media(min-width: $mq-xxlarge){
+      font-size: $xxl;
+    }
+  }
+}
+
+
+//---------------------------------------------- 
+//  Btn Theme
+//  Button reset theme
+//----------------------------------------------
+%btn-theme{
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  text-decoration:none;
+  @extend %font-links;
+  text-align: center;
+  cursor: pointer;
+  -webkit-appearance: none;
+  transition: all 0.4s ease-in-out;
+}
+
+//---------------------------------------------- 
+//  Btn-Draw
+//  Mixin that creates a button that draws out
+// .btn .btn__text span
+//----------------------------------------------
+
+$btn-draw-size: 1px;
+
+.btn-draw{
+  @extend %btn-theme;
+  color: $color-alpha;
+  margin-left: 2.3em;
+
+  &:after{
+    content: '';
+    top: 0;
+    right: 0;
+    height: $btn-draw-size;
+    width: 100%;
+    background-color: $color-alpha;
+  }
+  
+  &:before{
+    content: '';
+    position: absolute;
+    top:50%;
+    left: -2.4em;
+    height: $btn-draw-size;
+    width: 3em;
+    background-color: $color-alpha;
+    transition: all 0.25s ease;
+  }
+
+  .btn-draw__text{
+    position: relative;
+    display: block;
+    padding: 0.7em 2.29em;
+    line-height: 1.5;
+    transition: transform 0.5s ease;
+
+    &:before, &:after{
+      content: '';
+      position: absolute;
+      height: $btn-draw-size;
+      width: 0;
+      background-color: $color-alpha;
+
+    }
+    &:before{
+      top: 0;
+      left: 0;
+      transition: width 0.15s 0.45s $ease-cb-3; // 4th
+    }
+    &:after{
+      bottom: 0;
+      right: 0;
+      transition: width 0.15s 0.15s $ease-cb-3; // 2nd
+    }
+  }
+
+  // Buttons
+  .btn-draw__text > span{
+    
+    &:before, &:after{
+      content: '';
+      position: absolute;
+      height: 0;
+      width: $btn-draw-size;
+      background-color: $color-alpha;
+      transition: all 0.2s cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    }
+    &:before{
+      left: 0;
+      bottom: 0;
+      transition: height 0.15s 0 $ease-cb-3; // 1st
+    }
+    &:after{
+      right: 0;
+      top: 0;
+      transition: height 0.15s 0.3s $ease-cb-3; // 3rd
+    }
+  }
+  @media (hover) {
+  &:hover, a:hover &{
+    cursor: pointer;
+    color: $color-alpha;
+
+    &:before{
+      width: 0;
+      transition: all 0.4s ease;
+    }
+
+    .btn-draw__text{
+      transform: translateX(-2.2em);
+      transition: transform 0.5s ease, width 1s ease;
+
+      // Build Top and bottom borders via width
+      &:before{
+        width: 100%;
+        max-width: 100%;
+        transition: width 0.15s  $ease-cb-3; // 1st
+      }
+      &:after{
+        width: 100%;
+         transition: width 0.15s 0.3s  $ease-cb-3; // 3rd
+      }
+    }
+
+    // Build Left and Right borders via height;
+    .btn-draw__text > span{
+      
+      &:before{
+        left: 0;
+        height: 100%;
+        transition: height 0.15s 0.45s $ease-cb-3; // 4th
+      }
+      &:after{
+        right: 0;
+        height: 100%;
+        transition: height 0.15s 0.15s $ease-cb-3; // 2nd
+      }
+    }  
+  }
+}
+}
+
+//---------------------------------------------- 
+//  Btn Draw - White modifier
+//----------------------------------------------
+.btn-draw.btn--white{
+  color: #fff;
+
+  &:before, 
+  &:after, 
+  .btn-draw__text:before, 
+  .btn-draw__text:after,
+  .btn-draw__text > span:before, 
+  .btn-draw__text > span:after{
+    background-color: #fff
+  }
+
+  &:hover, 
+  a:hover &{
+    color: #fff;
+  }
+}
+
+
+
+//----------------------------------------------
+// Typography
+//----------------------------------------------
+body {
+  font-family: $font-paragraph;
+  line-height: 1.6;
+}
+
+//----------------------------------------------
+// Fluid body sizing
+//----------------------------------------------
+body {
+  font-size: 100%;
+  
+  @media (min-width: $mq-small) {
+    font-size: 102%;
+  }
+  @media (min-width: $mq-med) {
+    font-size: 103%;
+  }
+  @media (min-width: $mq-large) {
+    font-size: 107%;
+  }
+  @media (min-width: 75em) {
+    font-size: 110%;
+  }
+  @media (min-width: $mq-xlarge) {
+    font-size: 120%;
+  }
+  @media (min-width: $mq-xxlarge) {
+    font-size: 130%;
+  }
+  @media (min-width: $mq-xxxlarge) {
+    font-size: 140%;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-header;
+  font-weight: 700;
+}
+
+
+
+//---------------------------------------------- 
+//  CP Slider - CP-Slides
+//  The Container for CP Slides, with requirements for 
+//  scroll jacking interaction.
+//----------------------------------------------
+.velo-slides{
+  z-index: 8;
+  position: relative;
+  height: 100vh;
+  background-color: #111;
+
+  // Might need to do above $mq-large
+  &[data-velo-slider="on"]{
+    overflow: hidden;
+  }
+}
+
+//---------------------------------------------- 
+//  CP Slider - CP-Slide
+//  The single slide instances
+//----------------------------------------------
+.velo-slide{
+  height: 100vh;
+  z-index: 4;
+
+  @media (min-width: $mq-med) and (max-width: $mq-large){
+    font-size: 80%;
+  }
+
+  @media (min-width: $mq-med) and  (min-height: 0) and (max-height: 45em){
+    font-size: 70%;
+  }
+
+  // scroll jack requirement
+  [data-velo-slider="on"] &{
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  // Is active
+  &.is-active{
+    z-index: 8;
+  }
+
+  // The Slide Background
+  &__bg{
+    z-index: 7;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    color: #111;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    background-color: #111;
+    // Apply box shadow for a more 3d effect. js applies this value.
+    //box-shadow: 0 0 0 rgba(25, 30, 46, 0.4);
+    overflow: hidden;
+    @include bg_overlay(#111, 0.4);
+  }
+
+  // Apply Colors to our backgrounds and set currentColor
+  &:nth-of-type(1n) .velo-slide__bg{
+    //background-color: $color-alpha;
+    //color: $color-alpha;
+  }
+
+
+  // Slide Background Image
+  &__figure{
+    z-index: 0;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: scale(1);
+    transition: transform 0.5s ease;
+
+    //padding: 7em;
+    .is-hovering &{
+      transform: scale(1.1);
+      transition: transform 0.5s ease;
+    }
+  }
+
+  ///
+  &__vid-wrap{
+    z-index: 5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+    transform: scale(1);
+    transition: transform 0.5s ease;
+    @include bg_overlay(#111, 0.4);
+    .is-hovering &{
+      transform: scale(1.1);
+      transition: transform 0.5s ease;
+    }
+  }
+
+  &__vid{
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: auto;
+    min-width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 100%;
+    object-fit:cover;
+  }
+
+  // Our main content wrap for each slide instance
+  &__header{
+    z-index: 9;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    overflow-y: hidden;
+    padding: 6%;
+    //transform: translateX(5%);
+  }
+
+  // Velo-Slide__Pretitle
+  &__pretitle{
+    color: #fff;
+    max-width: 22em;
+    @media (min-width: $mq-med){
+      margin-left: 7%;
+    }
+    @media (max-width: $mq-med){
+      //order:2;
+    }
+  }
+
+  // Velo-Slide__Title
+  // The Title for each slide
+  &__title{
+    margin-bottom: 0.1em;
+    line-height: 1.1;
+    color: #fff;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    
+    @include font-rwd(2.25em, 5em, 5em, 5em);
+  }
+
+  // Velo-Slide__Text
+  &__text{
+    color: #fff;
+    max-width: 30em;
+    margin-top: 0;
+    display: inline-block;
+    margin-left: 1%;
+    font-size: 1.1em;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  // Velo-Slide__Btn
+  &__btn{
+    opacity: 0;
+    @media (min-width: $mq-med){
+      margin-left: 1vw;
+    }
+    @media (max-width: $mq-med){
+      //order: 3;
+    }
+
+    .is-active &{
+      opacity: 1;
+    }
+  }
+  &__btn > a > span{
+    opacity: 0;
+    overflow-y: hidden;
+    transform: translate3d(0,100%,0);
+
+    .is-active &{
+      opacity: 1;
+      z-index: 9999;
+      transform: translate3d(0,0,0);
+      transition: transform 0.4s ease, opacity 0.8s ease;
+    }
+  }
+}
+
+
+.velo-slides[data-velo-theme="light"]{
+  background: #212121;
+  border: 1em solid #c5cac5;
+
+  .velo-slide{
+    margin-top: -1em;
+  }
+
+  .velo-slide__bg{
+    color: #c5cac5;
+  }
+}
+
+
+
+[data-velo-theme="dark"]{
+  background: #111;
+
+  .velo-slides__bg{
+    background-color: #111;
+    filter: grayscale(100%);
+  }
+}
+
+//---------------------------------------------- 
+//  Overflow Hidden
+//  Styles to enable slice effect for text entrances  
+//----------------------------------------------
+.oh{
+  display: block;
+  overflow-y: hidden;
+  padding: 0.02em 0;
+}
+  
+.oh span{
+  display: inline-block;
+  transform:translate3d(0,140%,0);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.8s ease;
+}
+
+.is-active .oh span{
+  transform:translate3d(0,0%,0);
+  opacity: 1;
+  transition: transform 0.6s $ease-cb-3, opacity 0.1s ease;
+}
+
+.is-active .oh:nth-of-type(2n) span{
+  transition-delay:0.2s;
+}
+
+
+//---------------------------------------------- 
+//  CP Slider Border Interactions  
+//----------------------------------------------
+
+$border-resting-sm:0vw;
+$border-animating-sm: 8vw;
+$border-resting:10vw;
+$border-resting-xl:7vw;
+$border-resting-xxl:7vw;
+$border-animating: 12vw;
+$border-hovering: 0vw;
+
+@mixin velo-slider-border($h_w, $sm, $med, $xl, $xxl){
+    #{$h_w}: $sm;
+  @media (min-width: $mq-med){
+    #{$h_w}:  $med;
+  }
+  @media (min-width: $mq-xlarge){
+    #{$h_w}: $xl;
+  }
+  @media (min-width: $mq-xxlarge){
+    #{$h_w}:  $xxl;
+  }
+}
+
+
+.border, 
+.border:before, 
+.border:after, 
+.border span{
+  z-index: 91;
+  position: fixed;
+  background-color: currentColor;
+  transition: 0.35s ease-in-out;
+
+  .is-hovering &{
+    transition: 0.5s ease-in-out;
+  }
+  .velocity-animating &{
+    transition: 0.5s $ease-cb-3;
+  }
+}
+
+.border{
+  top: 0;
+  left:0;
+  width: 100%;
+
+  @include velo-slider-border(height, $border-resting-sm, $border-resting, $border-resting-xl, $border-resting-xxl);
+
+  .is-hovering &{
+    height: $border-hovering;
+  }
+  .velocity-animating &{
+    height: $border-animating-sm;
+    @media (min-width: $mq-med){
+      height: $border-animating;
+    }
+  }
+}
+
+.border:before{
+  content:'';
+  bottom: 0;
+  left: 0;
+  width: $border-resting-sm;
+  height: 100%;
+  @include velo-slider-border(width, $border-resting-sm, $border-resting, $border-resting-xl, $border-resting-xxl);
+
+  .is-hovering &{
+    width: $border-hovering;
+  }
+
+  .velocity-animating &{
+    width: $border-animating-sm;
+    @media (min-width: $mq-med){
+      width: $border-animating;
+    }
+  }
+}
+
+.border:after{
+  content:'';
+  bottom: 0;
+  right: 0;
+  height:100%;
+  width: $border-resting-sm;
+  @include velo-slider-border(width, $border-resting-sm, $border-resting, $border-resting-xl, $border-resting-xxl);
+  
+  .is-hovering &{
+    width: $border-hovering;
+  }
+
+  .velocity-animating &{
+    width: $border-animating-sm;
+    @media (min-width: $mq-med){
+      width: $border-animating;
+    }
+  }
+}
+
+.border span{
+  bottom: 0;
+  left: 0;
+  height: $border-resting-sm;
+  width: 100%;
+  @include velo-slider-border(height, $border-resting-sm, $border-resting, $border-resting-xl, $border-resting-xxl);
+
+  .is-hovering &{
+    height: $border-hovering;
+  }
+  .velocity-animating &{
+    height: $border-animating-sm;
+    @media (min-width: $mq-med){
+      height: $border-animating;
+    }
+  }
+}
+
+
+//---------------------------------------------- 
+//  CP Slider Hints
+//  Vertical line with text, rotated to left of slide
+//----------------------------------------------
+.velo-slider__hint {
+  z-index: 99;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  height: 100vh;
+  width: 4em;
+  font-size: 0.9em;
+  color: #fff;
+
+  @media (min-width: $mq-med){
+    display: block;
+  }
+  
+  & > span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    white-space: nowrap;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    @extend %font-links;
+    overflow:hidden;
+
+  }
+
+  & > span > span{
+    display: inline-block;
+    transform: translateY(-110%);
+    
+    .is-active &{
+      opacity: 1;
+      top: 50%;
+      transition: 1s  $ease-cb-2;
+      transform: translateY(0%);
+      transition: 0.4 ease;
+    }
+  }
+}
+  
+//---------------------------------------------- 
+//  CP Slides: Nav
+//  Up/Down nav for CP Slider
+//----------------------------------------------
+
+.velo-slides-nav {
+  /* lateral navigation */
+  position: fixed;
+  z-index: 91;
+  right: 3%;
+  bottom: 1em;
+
+  @media (min-width: $mq-med){
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+  }
+
+  &__list{
+    list-style: none;
+  }
+
+  li:first-child{
+    margin-bottom: 0.25em;
+  }
+  
+  a {
+    display: block;
+    color: rgba(#fff,0.9);
+    transition: color 0.5s ease, text-shadow 0.5s ease;
+
+    &:hover{
+      color: rgba(#fff,1);
+      text-shadow: 0px 0px 6px rgba(255,255,255,0.6);
+      transition: color 0.5s ease, text-shadow 0.5s ease;
+    }
+  }
+
+  a.inactive {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s 0s, visibility 0s 0.2s;
+  }
+  i{
+    font-size: 2.2em;
+
+    @media (min-width: $mq-med){
+      font-size: 1.5em;
+    }
+  }
+}

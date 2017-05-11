@@ -1,0 +1,496 @@
+//---------------------------------------------- 
+//  Velo Slides
+//----------------------------------------------
+.velo-slides{
+  z-index: 8;
+  position: relative;
+  height: 100vh;
+  background-color: #111;
+
+  // Might need to do above $mq-large
+  &[data-velo-slider="on"]{
+    overflow: hidden;
+  }
+}
+
+//---------------------------------------------- 
+//  Velo Slider - Velo-Slide
+//  The single slide instances
+//----------------------------------------------
+.velo-slide{
+  height: 100vh;
+  z-index: 4;
+
+  @media (min-width: $mq-med) and (max-width: $mq-large){
+    font-size: 80%;
+  }
+
+  @media (min-width: $mq-med) and  (min-height: 0) and (max-height: 45em){
+    font-size: 70%;
+  }
+
+  // Init velo via data att
+  [data-velo-slider="on"] &{
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  // Is active
+  &.is-active{
+    z-index: 8;
+  }
+
+  // The Slide Background
+  &__bg{
+    z-index: 7;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    color: #111;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    background-color: #111;
+    // Apply box shadow for a more 3d effect. js applies this value.
+    //box-shadow: 0 0 0 rgba(25, 30, 46, 0.4);
+    overflow: hidden;
+    
+    &:after {
+      z-index: 0;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0.4;
+      background: #111;
+    }
+  }
+
+  // Apply Colors to our backgrounds and set currentColor
+  // Useful if you want each slide to have different colors
+  &:nth-of-type(1n) .velo-slide__bg{
+    //background-color: $color-alpha;
+    //color: $color-alpha;
+  }
+
+
+  // Slide Background Image
+  &__figure{
+    z-index: 0;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: scale(1);
+    transition: transform 0.5s ease;
+
+    //padding: 7em;
+    .is-hovering &{
+      transform: scale(1.1);
+      transition: transform 0.5s ease;
+    }
+  }
+
+  // Video Wrap
+  // If you want to use video, this is a pure css solution
+  &__vid-wrap{
+    z-index: 5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+    transform: scale(1);
+    transition: transform 0.5s ease;
+    
+    &:after {
+      z-index: 0;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0.4;
+      background: #111;
+    }
+    
+    .is-hovering &{
+      transform: scale(1.1);
+      transition: transform 0.5s ease;
+    }
+  }
+
+  &__vid{
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: auto;
+    min-width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 100%;
+    object-fit:cover;
+  }
+
+  // Our main content wrap for each slide instance
+  &__header{
+    z-index: 9;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    overflow-y: hidden;
+    padding: 6%;
+    //transform: translateX(5%);
+  }
+
+  // Velo-Slide__Pretitle
+  &__pretitle{
+    color: #fff;
+    max-width: 22em;
+    @media (min-width: $mq-med){
+      margin-left: 7%;
+    }
+    @media (max-width: $mq-med){
+      //order:2;
+    }
+  }
+
+  // Velo-Slide__Title
+  // The Title for each slide
+  &__title{
+    margin-bottom: 0.1em;
+    line-height: 1.1;
+    color: #fff;
+    letter-spacing: -0.025em;
+    
+    @include font-rwd(2.25em, 5em, 5em, 5em);
+  }
+
+  // Velo-Slide__Text
+  &__text{
+    color: #fff;
+    max-width: 29em;
+    margin-top: 0;
+    display: inline-block;
+    margin-left: 1%;
+  }
+
+  // Velo-Slide__Btn
+  &__btn{
+    opacity: 0;
+    @media (min-width: $mq-med){
+      margin-left: 1vw;
+    }
+
+    .is-active &{
+      opacity: 1;
+    }
+  }
+  &__btn > a > span{
+    opacity: 0;
+    overflow-y: hidden;
+    transform: translate3d(0,100%,0);
+
+    .is-active &{
+      opacity: 1;
+      z-index: 9999;
+      transform: translate3d(0,0,0);
+      transition: transform 0.4s ease, opacity 0.8s ease;
+    }
+  }
+}
+
+
+//---------------------------------------------- 
+//  Color Theme - Light
+//----------------------------------------------
+.velo-slides[data-velo-theme="light"]{
+  background: #212121;
+  border: 1em solid #c5cac5;
+
+  .velo-slide{
+    margin-top: -1em;
+  }
+
+  .velo-slide__bg{
+    color: #c5cac5;
+  }
+}
+
+//---------------------------------------------- 
+//  Color Theme - Dark
+//----------------------------------------------
+[data-velo-theme="dark"]{
+  background: #111;
+
+  .velo-slides__bg{
+    background-color: #111;
+    filter: grayscale(100%);
+  }
+}
+
+//---------------------------------------------- 
+//  Overflow Hidden
+//  Styles to enable slice effect for text entrances  
+//----------------------------------------------
+.oh{
+  display: block;
+  overflow-y: hidden;
+  padding: 0.02em 0;
+}
+  
+.oh span{
+  display: inline-block;
+  transform:translate3d(0,140%,0);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.8s ease;
+}
+
+.is-active .oh span{
+  transform:translate3d(0,0%,0);
+  opacity: 1;
+  transition: transform 0.6s $ease-cb-3, opacity 0.1s ease;
+}
+
+.is-active .oh:nth-of-type(2n) span{
+  transition-delay:0.2s;
+}
+
+
+//---------------------------------------------- 
+//  Velo Slider Border Interactions  
+//----------------------------------------------
+
+$border-resting-sm:0vw;
+$border-animating-sm: 8vw;
+$border-resting:10vw;
+$border-resting-xl:7vw;
+$border-resting-xxl:7vw;
+$border-animating: 14vw;
+$border-hovering: 0vw;
+
+@mixin velo-slider-border($h_w, $sm, $med, $xl, $xxl){
+    #{$h_w}: $sm;
+  @media (min-width: $mq-med){
+    #{$h_w}:  $med;
+  }
+  @media (min-width: $mq-xlarge){
+    #{$h_w}: $xl;
+  }
+  @media (min-width: $mq-xxlarge){
+    #{$h_w}:  $xxl;
+  }
+}
+
+.border, 
+.border:before, 
+.border:after, 
+.border span{
+  z-index: 91;
+  position: fixed;
+  background-color: currentColor;
+  transition: 0.35s ease-in-out;
+
+  .is-hovering &{
+    transition: 0.5s ease-in-out;
+  }
+  .velocity-animating &{
+    transition: 0.5s $ease-cb-3;
+  }
+}
+
+.border{
+  top: 0;
+  left:0;
+  width: 100%;
+
+  @include velo-slider-border(height, $border-resting-sm, $border-resting, $border-resting-xl, $border-resting-xxl);
+
+  .is-hovering &{
+    height: $border-hovering;
+  }
+  .velocity-animating &{
+    height: $border-animating-sm;
+    @media (min-width: $mq-med){
+      height: $border-animating;
+    }
+  }
+}
+
+.border:before{
+  content:'';
+  bottom: 0;
+  left: 0;
+  width: $border-resting-sm;
+  height: 100%;
+  @include velo-slider-border(width, $border-resting-sm, $border-resting, $border-resting-xl, $border-resting-xxl);
+
+  .is-hovering &{
+    width: $border-hovering;
+  }
+
+  .velocity-animating &{
+    width: $border-animating-sm;
+    @media (min-width: $mq-med){
+      width: $border-animating;
+    }
+  }
+}
+
+.border:after{
+  content:'';
+  bottom: 0;
+  right: 0;
+  height:100%;
+  width: $border-resting-sm;
+  @include velo-slider-border(width, $border-resting-sm, $border-resting, $border-resting-xl, $border-resting-xxl);
+  
+  .is-hovering &{
+    width: $border-hovering;
+  }
+
+  .velocity-animating &{
+    width: $border-animating-sm;
+    @media (min-width: $mq-med){
+      width: $border-animating;
+    }
+  }
+}
+
+.border span{
+  bottom: 0;
+  left: 0;
+  height: $border-resting-sm;
+  width: 100%;
+  @include velo-slider-border(height, $border-resting-sm, $border-resting, $border-resting-xl, $border-resting-xxl);
+
+  .is-hovering &{
+    height: $border-hovering;
+  }
+  .velocity-animating &{
+    height: $border-animating-sm;
+    @media (min-width: $mq-med){
+      height: $border-animating;
+    }
+  }
+}
+
+
+//---------------------------------------------- 
+//  Velo Slider Hints
+//  Vertical line with text, rotated to left of slide
+//----------------------------------------------
+.velo-slider__hint {
+  z-index: 99;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  height: 100vh;
+  width: 4em;
+  color: #fff;
+  font-family: $font-paragraph;
+  font-weight: 300;
+
+  @media (min-width: $mq-med){
+    display: block;
+  }
+  
+  & > span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    white-space: nowrap;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    font-family: $font-header;
+    font-size: 0.8em;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    overflow:hidden;
+
+  }
+
+  & > span > span{
+    display: inline-block;
+    transform: translateY(-110%);
+    
+    .is-active &{
+      opacity: 1;
+      top: 50%;
+      transition: 1s  $ease-cb-2;
+      transform: translateY(0%);
+      transition: 0.4 ease;
+    }
+  }
+}
+  
+//---------------------------------------------- 
+//  Velo Slides: Nav
+//  Up/Down nav 
+//----------------------------------------------
+
+.velo-slides-nav {
+  /* lateral navigation */
+  position: fixed;
+  z-index: 91;
+  right: 3%;
+  bottom: 1em;
+
+  @media (min-width: $mq-med){
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+  }
+
+  &__list{
+    list-style: none;
+  }
+
+  li:first-child{
+    margin-bottom: 0.25em;
+  }
+  
+  a {
+    display: block;
+    color: rgba(#fff,0.9);
+    transition: color 0.5s ease, text-shadow 0.5s ease;
+
+    &:hover{
+      color: rgba(#fff,1);
+      text-shadow: 0px 0px 6px rgba(255,255,255,0.6);
+      transition: color 0.5s ease, text-shadow 0.5s ease;
+    }
+  }
+
+  a.inactive {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s 0s, visibility 0s 0.2s;
+  }
+  i{
+    font-size: 2.2em;
+
+    @media (min-width: $mq-med){
+      font-size: 1.5em;
+    }
+  }
+}

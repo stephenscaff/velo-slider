@@ -1,0 +1,168 @@
+//---------------------------------------------- 
+//  Btn Theme
+//  Button reset theme
+//----------------------------------------------
+%btn-theme{
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  @extend %font-links;
+  text-align: center;
+  cursor: pointer;
+  -webkit-appearance: none;
+  transition: all 0.4s $ease-in-sine;
+}
+
+//---------------------------------------------- 
+//  Btn-Draw
+//  Mixin that creates a button that draws out
+// .btn .btn__text span
+//----------------------------------------------
+
+$btn-draw-size: 1px;
+
+.btn-draw{
+  @extend %btn-theme;
+  color: $color-alpha;
+  margin-left: 2.3em;
+
+  &:after{
+    content: '';
+    top: 0;
+    right: 0;
+    height: $btn-draw-size;
+    width: 100%;
+    background-color: $color-alpha;
+  }
+  
+  &:before{
+    content: '';
+    position: absolute;
+    top:50%;
+    left: -2.4em;
+    height: $btn-draw-size;
+    width: 3em;
+    background-color: $color-alpha;
+    transition: all 0.25s ease;
+  }
+
+  .btn-draw__text{
+    position: relative;
+    display: block;
+    padding: 0.7em 2.29em;
+    line-height: 1.5;
+    transition: transform 0.5s ease;
+
+    &:before, &:after{
+      content: '';
+      position: absolute;
+      height: $btn-draw-size;
+      width: 0;
+      background-color: $color-alpha;
+
+    }
+    &:before{
+      top: 0;
+      left: 0;
+      transition: width 0.15s 0.45s $ease-cb-3; // 4th
+    }
+    &:after{
+      bottom: 0;
+      right: 0;
+      transition: width 0.15s 0.15s $ease-cb-3; // 2nd
+    }
+  }
+
+  // Buttons
+  .btn-draw__text > span{
+    
+    &:before, &:after{
+      content: '';
+      position: absolute;
+      height: 0;
+      width: $btn-draw-size;
+      background-color: $color-alpha;
+      transition: all 0.2s cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    }
+    &:before{
+      left: 0;
+      bottom: 0;
+      transition: height 0.15s 0 $ease-cb-3; // 1st
+    }
+    &:after{
+      right: 0;
+      top: 0;
+      transition: height 0.15s 0.3s $ease-cb-3; // 3rd
+    }
+  }
+  @media (hover) {
+  &:hover, a:hover &{
+    cursor: pointer;
+    color: $color-alpha;
+
+    &:before{
+      width: 0;
+      transition: all 0.4s ease;
+    }
+
+    .btn-draw__text{
+      transform: translateX(-2.2em);
+      transition: transform 0.5s ease, width 1s ease;
+
+      // Build Top and bottom borders via width
+      &:before{
+        width: 100%;
+        max-width: 100%;
+        transition: width 0.15s  $ease-cb-3; // 1st
+      }
+      &:after{
+        width: 100%;
+         transition: width 0.15s 0.3s  $ease-cb-3; // 3rd
+      }
+    }
+
+    // Build Left and Right borders via height;
+    .btn-draw__text > span{
+      
+      &:before{
+        left: 0;
+        height: 100%;
+        transition: height 0.15s 0.45s $ease-cb-3; // 4th
+      }
+      &:after{
+        right: 0;
+        height: 100%;
+        transition: height 0.15s 0.15s $ease-cb-3; // 2nd
+      }
+    }  
+  }
+}
+}
+
+//---------------------------------------------- 
+//  Btn Draw - White modifier
+//----------------------------------------------
+.btn-draw.btn--white{
+  color: #fff;
+
+  &:before, 
+  &:after, 
+  .btn-draw__text:before, 
+  .btn-draw__text:after,
+  .btn-draw__text > span:before, 
+  .btn-draw__text > span:after{
+    background-color: #fff
+  }
+
+  &:hover, 
+  a:hover &{
+    color: #fff;
+  }
+}
+
+

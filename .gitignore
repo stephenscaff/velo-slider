@@ -1,0 +1,21 @@
+# Misc
+/tmp
+.DS_Store
+
+# Logging
+*.log
+
+# CodeKit
+.sass-cache
+.sass-cache/*
+.scssc
+.codekit-cache
+.codekit-cache/
+config.codekit
+config.codekit3
+
+# Assets
+assets/css/app.min.css
+assets/css/app.min.css.map
+assets/js/app.min.js
+assets/js/app.min.js.map
