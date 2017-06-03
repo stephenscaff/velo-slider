@@ -1,15 +1,17 @@
 
 /**
- * CP Slider
- * A Custom Slider for Capital Pacific's Home page.
- * Uses optional scroll jacking, key and arrow nav to trigger animations
- * enhanced with Velocity JS, and registered Velocity Effects (via Velocity UI Pack)
+ * Velo Slider
+ * A Custom Slider interaction component using Velocity and Velocity UI pack for 
+ * enhanced animation performance.
+ * Uses optional scroll jacking, key and arrow nav to trigger animations.
  *
  * @version:  1
  * @author    Stephen Scaff
- * @see       js/vendor/velocity.js
+ * @see       js/vendor/velocity.js (v1.3.1)
  * @see       js/components/_velocity-effects.js
  * @see       scss/components/velo-slider.scss
+ * @todo      add swipe support (without another damn lib)
+ * @todo       Update to latest version of Velocity (currently 1.5 - Have to investigate what's breaking).
  */
 
 var VeloSlider = (function() {
@@ -78,25 +80,14 @@ var VeloSlider = (function() {
           VeloSlider.prevSlide();
         }
       });
-      
-      // // Swipes
-      // $(window).swipe(function( direction, offset ) {
-      //   //if (offset < 100) { return; }
-      //   if (direction == "up") { 
-      //     VeloSlider.prevSlide(); 
-      //     console.log('swipe up');
-
-      //   }
-      //   if (direction == "down") { VeloSlider.nextSlide(); } 
-      // });
     
       //set navigation arrows visibility
       VeloSlider.checkNavigation();
 
       // Call Button Hover animation
-      VeloSlider.hoverAnimation();
-     
+      VeloSlider.hoverAnimation(); 
     },
+
 
     /**
      * Hover Animation
@@ -108,6 +99,7 @@ var VeloSlider = (function() {
         $(this).closest(settings.$veloSlide).toggleClass('is-hovering');
       });
     },
+
 
     /** 
      * Set Animation
@@ -138,6 +130,7 @@ var VeloSlider = (function() {
       return [animationVisible, animationTop, animationBottom, animDuration, easing];
     },
 
+
     /** 
      * Init Scroll Jaclk
      */
@@ -163,6 +156,7 @@ var VeloSlider = (function() {
       bottomSection.children('div').velocity(animationBottom, 0);
     },
 
+
     /**
      * Scroll Jack
      * On Mouse Scroll
@@ -177,6 +171,7 @@ var VeloSlider = (function() {
       }
       return false;
     },
+
 
     /**
      * Previous Slide
@@ -217,8 +212,7 @@ var VeloSlider = (function() {
      * Next Slide
      */
     nextSlide: function(e) {
-      
-      //go to next section
+
       typeof e !== 'undefined' && e.preventDefault();
       
       var visibleSlide = settings.$veloSlide.filter('.is-active'),
@@ -267,94 +261,3 @@ var VeloSlider = (function() {
 
 // INIT
 VeloSlider.init();
-  
-
-
-// (function($, window, undefined) {
-//     // First check to see if the platform is an iPhone or iPod
-//     if(/iP/.test(navigator.platform) && /Safari/i.test(navigator.userAgent)){
-//         var mobileSafari = "Safari";
-//     }
-
-//     var $cp_slides = $('.velo-slides, .velo-slide, .velo-slide__bg');
- 
-//     // Set the div height
-//     function setHeight($cp_slides) {
-//         var new_height = $(this).height();
-//         // if mobileSafari add +60px
-//         if (typeof mobileSafari === 'string'){ new_height - 60 };
-//         $cp_slides.css('height', new_height);
-//     }
- 
-//     setHeight($cp_slides);
-//     $(window).resize(function() {
-//         setHeight.call(this, $cp_slides);
-//     });
- 
-// }(jQuery, this));
-
-
-
-//jQuery is required to run this code
-$( document ).ready(function() {
-
-    scaleVideoContainer();
-
-    initBannerVideoSize('.video-container .poster img');
-    initBannerVideoSize('.video-container .filter');
-    initBannerVideoSize('.video-container video');
-
-    $(window).on('resize', function() {
-        scaleVideoContainer();
-        scaleBannerVideoSize('.video-container .poster img');
-        scaleBannerVideoSize('.video-container .filter');
-        scaleBannerVideoSize('.video-container video');
-    });
-
-});
-
-function scaleVideoContainer() {
-
-    var height = $(window).height() + 5;
-    var unitHeight = parseInt(height) + 'px';
-    $('.homepage-hero-module').css('height',unitHeight);
-
-}
-
-function initBannerVideoSize(element){
-
-    $(element).each(function(){
-        $(this).data('height', $(this).height());
-        $(this).data('width', $(this).width());
-    });
-
-    scaleBannerVideoSize(element);
-
-}
-
-function scaleBannerVideoSize(element){
-
-    var windowWidth = $(window).width(),
-    windowHeight = $(window).height() + 5,
-    videoWidth,
-    videoHeight;
-
-    // console.log(windowHeight);
-
-    $(element).each(function(){
-        var videoAspectRatio = $(this).data('height')/$(this).data('width');
-
-        $(this).width(windowWidth);
-
-        if(windowWidth < 1000){
-            videoHeight = windowHeight;
-            videoWidth = videoHeight / videoAspectRatio;
-            $(this).css({'margin-top' : 0, 'margin-left' : -(videoWidth - windowWidth) / 2 + 'px'});
-
-            $(this).width(videoWidth).height(videoHeight);
-        }
-
-        $('.homepage-hero-module .video-container video').addClass('fadeIn animated');
-
-    });
-}
